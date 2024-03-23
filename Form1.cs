@@ -16,8 +16,9 @@ namespace Words
         private List<string> en = new List<string>();
        
         WorkSheet sheet = WorkBook.Load("C:\\Users\\Nodirbek\\Desktop\\English for evolution\\Words\\words.xlsx").WorkSheets.First();
-        int i = 1;
+        
         List<string> uz = new List<string>();
+        List<int> indexes = new List<int>();
 
         public Words()
         {
@@ -27,21 +28,37 @@ namespace Words
 
         private void Words_Load(object sender, EventArgs e)
         {
-            
+            int i = 1;
+            this.en.Add("en");
+            this.uz.Add("uz");
             while (sheet["A" + i.ToString()].ToString() != null)
             {
-                en.Add(sheet["A" + i.ToString()].ToString());
-                uz.Add(sheet["B" + i.ToString()].ToString());
+                this.en.Add(sheet["A" + i.ToString()].ToString());
+                this.uz.Add(sheet["B" + i.ToString()].ToString());
                 i++;
             }
-            label4.Text += en.Count;
+            label4.Text += en.Count - 1;
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
+            bool check(List<int> a, int x)
+            {
+                foreach (var f in a)
+                    if (f == x) return false;
+                return true;
+            }
             if (first.Text != "" && second.Text != "" && en.Count >= Convert.ToInt32(first.Text) && en.Count >= Convert.ToInt32(second.Text) && Convert.ToInt32(first.Text) <= Convert.ToInt32(second.Text))
             {
-                en_uz form = new en_uz(en);
+                int l = Convert.ToInt32(first.Text), r = Convert.ToInt32(second.Text);
+                Random rnd = new Random();
+                while (indexes.Count < r - l + 1)
+                {
+
+                    int n = rnd.Next(l, r + 1);
+                    if (check(indexes, n)) indexes.Add(n);
+                }
+                en_uz form = new en_uz(en, uz, indexes);
                 this.Hide();
                 form.Show();
             }
@@ -51,9 +68,23 @@ namespace Words
 
         private void button2_Click(object sender, EventArgs e)
         {
+            bool check(List<int> a, int x)
+            {
+                foreach (var f in a)
+                    if (f == x) return false;
+                return true;
+            }
             if (first.Text != "" && second.Text != "" && en.Count >= Convert.ToInt32(first.Text) && en.Count >= Convert.ToInt32(second.Text) && Convert.ToInt32(first.Text) <= Convert.ToInt32(second.Text))
             {
-                uz_en form = new uz_en();
+                int l = Convert.ToInt32(first.Text), r = Convert.ToInt32(second.Text);
+                Random rnd = new Random();
+                while (indexes.Count < r - l + 1)
+                {
+
+                    int n = rnd.Next(l, r + 1);
+                    if (check(indexes, n)) indexes.Add(n);
+                }
+                uz_en form = new uz_en(en, uz, indexes);
                 this.Hide();
                 form.Show();
             }

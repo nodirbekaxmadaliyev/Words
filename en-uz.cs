@@ -15,15 +15,20 @@ namespace Words
 {
     public partial class en_uz : Form
     {
-        List<string> words;
+        List<string> en;
+        List<string> uz;
+        List<int> indexes;
+        int i = 0, wrong = 0;
         public en_uz()
         {
             InitializeComponent();
         }
-        public en_uz(List<string> words)
+        public en_uz(List<string> en, List<string> uz, List<int>indexes)
         {
             InitializeComponent();
-            this.words = words;   
+            this.en = en;
+            this.uz = uz;
+            this.indexes = indexes;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -35,36 +40,52 @@ namespace Words
 
         private void en_uz_Load(object sender, EventArgs e)
         {
-            label1.Text = words.ToString();
-            bool check(List<int> a, int x)
-            {
-                foreach(var f in a)
-                    if (f == x) return false;
-                return true;
-            }
-            WorkSheet sheet = WorkBook.Load("C:\\Users\\Nodirbek\\Desktop\\English for evolution\\Words\\words.xlsx").WorkSheets.First();
-            int i = 1;
-            List<string> en = new List<string>();
-            List<string> uz = new List<string>();
-            while (sheet["A" + i.ToString()].ToString() != null)
-            {
-                en.Add(sheet["A" + i.ToString()].ToString());
-                uz.Add(sheet["B" + i.ToString()].ToString());
-                i++;
-            }
-            Words form = new Words();
-            int l = Convert.ToInt32(form.first.Text), r = l = Convert.ToInt32(form.second.Text), wrong = 0;
-            List <int> indexes = new List<int>();
-            Random rnd = new Random();
-            while (indexes.Count < r - l + 1)
-            {
+            label1.Text = en[indexes[i]];
+        }
 
-                int n = rnd.Next(l, r + 1);
-                if (check(indexes, n)) indexes.Add(n);
+        private void button2_Click(object sender, EventArgs e)
+        {
+            if (textBox1.Text == uz[indexes[i]])
+            {
+                i++;
+                if (i == indexes.Count)
+                {
+                    MessageBox.Show("Number of wrong answer : " + wrong.ToString());
+                    Words form = new Words();
+                    this.Hide();
+                    form.Show();
+                }
+                else
+                {
+                    label1.Text = en[indexes[i]];
+                    textBox1.Text = "";
+                }
             }
-            i = 0;
+            else
+            {
+                wrong++;
+                MessageBox.Show("WRONG!");
+                textBox1.Text = "";
+            }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            wrong++;
+            textBox1.Text = uz[indexes[i]];
+   
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
 
         }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
         private void en_uz_FormClosed_1(object sender, FormClosedEventArgs e)
         {
             Application.Exit();
