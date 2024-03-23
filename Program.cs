@@ -14,6 +14,8 @@ namespace Words
         [STAThread]
         static void Main()
         {
+
+            //changed
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Words());
